@@ -8,17 +8,19 @@ export default function List({ item, addToCart = () => { }, quantity, removeFrom
     return (
         <>
             <div className="card" style={{ backgroundColor: quantity > 0 && "#363636" }}>
-                <h3>{name}</h3>
-                <p><b>prezzo (u):</b> €{price}</p>
                 <div style={{ display: "flex", justifyContent: "space-between" }}>
-                    {!quantity > 0 ?
-                        <button type="button" onClick={addToCart}>Aggiungi</button>
-                        : <div>Quantità: {quantity}</div>}
-                    {quantity > 0 &&
+                    <h3>{name}</h3>
+                    {quantity &&
                         <button type="button" onClick={removeFromCart}>
                             <img src={cestino} alt="cestino" style={{ width: "20px" }} />
                         </button>}
                 </div>
+                <p><b>prezzo (u):</b> €{price}</p>
+                {!quantity > 0 ?
+                    <button type="button" onClick={addToCart}>Aggiungi</button>
+                    : <div>Quantità:
+                        <span style={{ margin: "0 5px" }}>{quantity}</span>
+                    </div>}
             </div>
         </>
     )
