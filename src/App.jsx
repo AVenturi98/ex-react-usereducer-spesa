@@ -8,20 +8,36 @@ const products = [
   { name: 'Pasta', price: 0.7 },
 ];
 
+
 function App() {
 
   const [addedProducts, setAddedProducts] = React.useState([]);
 
+  function updateProductQuantity(productName, newQuantity) {
+    setAddedProducts((prev) =>
+      prev.map((product) =>
+        product.name === productName
+          ? { ...product, quantity: newQuantity }
+          : product
+      )
+    );
+  }
+
 
   function addToCart(prod) {
-    setAddedProducts((prev) => {
-      const exsist = prev.some(p => p.name === prod.name);
 
-      if (exsist) return prev;
+    setAddedProducts((prev) => {
+      const exsist = prev.find(p => p.name === prod.name);
+
+      if (exsist) {
+        updateProductQuantity(prod.name, exsist.quantity + 1);
+        return prev;
+      };
 
       return [...prev, { ...prod, quantity: 1 }];
     });
   }
+
 
   return (
     <main>
