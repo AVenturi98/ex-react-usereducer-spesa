@@ -12,21 +12,26 @@ const products = [
 function App() {
 
   const [addedProducts, setAddedProducts] = React.useState([]);
+  // const [totalPay, setTotalPay] = React.useState([]);
+
 
   // Aggiungi un prodotto al carrello 
   function addToCart(prod) {
 
     setAddedProducts((prev) => {
+
+
       const exsist = prev.find(p => p.name === prod.name);
 
       if (exsist) {
         updateProductQuantity(prod.name, exsist.quantity + 1);
         return prev;
-      };
+      }
 
       return [...prev, { ...prod, quantity: 1 }];
     });
   }
+
 
   // Modificare la quantità di un prodotto già presente nel carrello
   function updateProductQuantity(productName, newQuantity) {
@@ -45,10 +50,20 @@ function App() {
   }
 
 
+
+  // Funzione per calcolare il totale da pagare
+  const totalPay = React.useMemo(() => {
+    return addedProducts.reduce((sum, prod) => sum + prod.quantity * prod.price, 0).toFixed(2);
+  }, [addedProducts]);
+
+
+
+
   return (
     <main>
       <h1>Lista prodotti</h1>
 
+      {/* LISTA PRODOTTI */}
       <ul>
         {products.map((p, i) =>
           <li key={i}>
@@ -56,16 +71,21 @@ function App() {
           </li>)}
       </ul>
 
+      {/* CARRELLO */}
       <h1>Carrello</h1>
       <ul>
         {addedProducts.length > 0 &&
           addedProducts.map((p, i) => (
             <li key={i}>
               <List item={p} quantity={p.quantity} removeFromCart={() => removeFromCart(p)} />
-
             </li>
           ))}
       </ul>
+      {/* TOTALE DA PAGARE */}
+      <div>
+        {addedProducts.length > 0 &&
+          <p>{totalPay}</p>}
+      </div>
     </main>
   )
 }
