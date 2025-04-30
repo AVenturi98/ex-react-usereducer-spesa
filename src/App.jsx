@@ -13,17 +13,7 @@ function App() {
 
   const [addedProducts, setAddedProducts] = React.useState([]);
 
-  function updateProductQuantity(productName, newQuantity) {
-    setAddedProducts((prev) =>
-      prev.map((product) =>
-        product.name === productName
-          ? { ...product, quantity: newQuantity }
-          : product
-      )
-    );
-  }
-
-
+  // Aggiungi un prodotto al carrello 
   function addToCart(prod) {
 
     setAddedProducts((prev) => {
@@ -36,6 +26,22 @@ function App() {
 
       return [...prev, { ...prod, quantity: 1 }];
     });
+  }
+
+  // Modificare la quantità di un prodotto già presente nel carrello
+  function updateProductQuantity(productName, newQuantity) {
+    setAddedProducts((prev) =>
+      prev.map((product) =>
+        product.name === productName
+          ? { ...product, quantity: newQuantity }
+          : product
+      )
+    );
+  }
+
+  // Rimuovere un prodotto dal carrello
+  const removeFromCart = (prod) => {
+    setAddedProducts((prev) => prev.filter(p => p.name !== prod.name));
   }
 
 
@@ -55,7 +61,7 @@ function App() {
         {addedProducts.length > 0 &&
           addedProducts.map((p, i) => (
             <li key={i}>
-              <List item={p} quantity={p.quantity} />
+              <List item={p} quantity={p.quantity} removeFromCart={() => removeFromCart(p)} />
 
             </li>
           ))}
