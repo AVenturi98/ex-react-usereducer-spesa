@@ -1,4 +1,5 @@
-import List from './components/List'
+import * as React from 'react';
+import List from './components/List';
 
 const products = [
   { name: 'Mela', price: 0.5 },
@@ -9,12 +10,40 @@ const products = [
 
 function App() {
 
+  const [addedProducts, setAddedProducts] = React.useState([]);
+
+
+  function addToCart(prod) {
+    setAddedProducts((prev) => {
+      const exsist = prev.some(p => p.name === prod.name);
+
+      if (exsist) return prev;
+
+      return [...prev, { ...prod, quantity: 1 }];
+    });
+  }
+
   return (
     <main>
       <h1>Lista prodotti</h1>
 
-      {products.map(e =>
-        <List item={e} />)}
+      <ul>
+        {products.map((p, i) =>
+          <li key={i}>
+            <List item={p} addToCart={() => addToCart(p)} added={true} />
+          </li>)}
+      </ul>
+
+      <h1>Carrello</h1>
+      <ul>
+        {addedProducts.length > 0 &&
+          addedProducts.map((p, i) => (
+            <li key={i}>
+              <List item={p} quantity={p.quantity} />
+
+            </li>
+          ))}
+      </ul>
     </main>
   )
 }
